@@ -1,0 +1,146 @@
+---
+title: "SKG1_forLearnerAnalysis"
+author: "Learner Name Here"
+date: "11/16/22"
+output: html_document
+  toc=true
+  toc_float: true
+---
+
+Experimental Details:
+There are two datasets in the .RData file that you will be receiving: SKG1 and SKG2. You will only focus on SKG1 dataset.
+
+SKG1 dataset contains samples that were collected by our collaborator, Dr. Judith Ashouri. There are a number of variables that we can look at in this study. Judy had different strains of mice: SKG, BoyJ, and wild-type. SKG mice get arthritis but the other two do not. She noticed that over time, the mice were getting sick in unexpected ways (they were getting something called "rectal prolapse" and needed to be euthanized early because of this). Treating the mice with broad spectrum antibiotics helped to alleviate this phenotype. She collected stool samples from the same mice both before and after antibiotics. She had males and females in her experiments, and this is of interest because females tend to get arthritis earlier and more consistently than males. We will spend some time understanding a table that Judy sent ("JA_comparisons" sheet in the Excel file that I send you). We will be comparing mice from different "Group", "gender",and "Collection" for mice that were given antibiotics. There are a lot of possible questions to ask of the data. 
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Libraries
+```{r loadLib}
+if (!require("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install("phyloseq")
+
+library(phyloseq); packageVersion("phyloseq")
+library(ggplot2); packageVersion("ggplot2")
+
+#the first time you run this, you will need to install all these packages.
+#this can be done by running the next two commands; after you run them, you will need to comment them out
+
+setRepositories() #enter 1 2 3 4 5
+install.packages(c("biomformat","ape","readxl","ggthemes","tidyverse","reshape","gplots","RColorBrewer","pheatmap","gridExtra","qiime2R","nlme","patchwork"))
+
+#you will load these libraries each time you start a new R session
+library(biomformat)
+library(ape)
+library(readxl)
+library(ggthemes)
+library(tidyverse)
+library(reshape)
+library(gplots)
+library(RColorBrewer)
+library(pheatmap)
+library(gridExtra)
+#library(qiime2R)
+library(nlme)
+library(patchwork) #for multiplot figures
+library(ggpubr)
+
+# Load packages into session, and print package version
+#sapply(c(.cran_packages, .bioc_packages), require, character.only = TRUE)
+set.seed(100)
+sessionInfo()
+
+#this helps create a consistent and clean layout for figures with text sizes that are suitable for publication
+theme_set(theme_classic(base_size = 9) +theme(axis.text = element_text(colour = "black"), legend.position="top", strip.background = element_blank()))
+```
+
+Load Data
+```{r}
+#find the path to where you stored SKG2021.Rdata, uncomment the line below and execute. Errors here will be because R cannot find where SKG2021.Rdata is located on your filesystem
+#path=""
+load(paste0(path,"SKG2021.Rdata"))
+```
+
+
+##View parts of the phyloseq object
+```{r}
+
+#sample table
+ps0 <- subset_samples(ps0, exp=="skg1" & SKG_Exp!="SKG2" & !is.na(MouseID))
+#ps0 <- subset_samples(ps0, TimePoint!= 3)
+#ps0 <- subset_samples(ps0, TimePoint!= 4)
+
+
+
+sampleDF=as.tibble(sample_data(ps0))
+#otu table
+ot=as.data.frame(ps0@otu_table)
+#tax table
+head(ps0@tax_table) #it takes a while to convert this into a dataframe / tibble, so I don't do it here
+#psm=psmelt(ps0) #put all three into a single table. Will take a while (3 minutes on my computer) and use a lot of computational resources. But will allow you to look at everything in 1 place.
+
+sampleDF_separated=sampleDF %>% separate(ID,sep=c(1:4), into=c("JA_Group","JA_Sex","JA_Abx","JA_Collection"))
+
+sample_data(ps0)$JA_Group <- sampleDF_separated$JA_Group
+sample_data(ps0)$JA_Sex <- sampleDF_separated$JA_Sex
+sample_data(ps0)$JA_Abx <- sampleDF_separated$JA_Abx
+sample_data(ps0)$JA_Collection <- sampleDF_separated$JA_Collection
+
+gt=tribble(~JA_Group,~GTSpec,~GTSpec2,
+          "1","WT","WT-Nur77",
+          "2","SKG","SKG-Nur77",
+          "3","SKG","SKG-Nakamura",
+          "4","SKG/BoyJ", "SKG-BoyJ")
+sampleDF_separated2 =left_join(sampleDF_separated, gt,by="JA_Group")
+rownames(sampleDF_separated2)=sampleDF_separated2$SampleLabel
+#sample_data(ps0)=sample_data(as.data.frame(sampleDF_separated2))
+sampleDF=as.tibble(sample_data(ps0))
+
+ps_t <- ps_rarefied
+```
+
+centered-log-ratio transformation, proportions, and rarefying data
+
+```{r}
+#Convenience functions for geometric mean and clr transform; all x are > 0 because of filtering that was done
+gm_mean = function(x, na.rm=TRUE){
+  # The geometric mean, with some error-protection bits.
+  exp(sum(log(x[x > 0 & !is.na(x)]), na.rm=na.rm) / length(x))
+  }
+
+clr = function(x, base=2){
+  x <- log((x / gm_mean(x)), base)
+  x[!is.finite(x) | is.na(x)] <- 0.0
+  return(x)
+  }
+
+#clr transform data for PCoA, multivariate analysis, differential abundance analysis, correlation analysis
+ps_clr <- transform_sample_counts(ps0, clr )
+
+#rarefied data for alpha diversity calculations, ANOSIM, and PERMANOVA
+set.seed(25123)
+ps_rarefied <- rarefy_even_depth(ps0, sample.size=1000) #LEARNER: you can change the sample size; you will exclude samples with fewer than this many reads
+
+#proportion data for visualization and comparing samples
+ps_prop <- transform_sample_counts(ps0, function (x) x/sum(x) * 100)
+
+```
+Convert Phyloseq objects to dataframes to export to csv
+```{r}
+sample_data_matrix <-as.matrix(sample_data(ps0))
+sample_data_df<-as.data.frame(sample_data_matrix)
+
+otu_matrix<-as.matrix(otu_table(ps0))
+otu_df<-as.data.frame(otu_matrix)
+
+tax_matrix<-as.matrix(tax_table(ps0))
+taxa_df<-as.data.frame(tax_matrix)
+
+write.csv(sample_data_df, "sample_data.csv", row.names=TRUE)
+write.csv(otu_df, "otu.csv", row.names=TRUE)
+write.csv(taxa_df, "taxa.csv", row.names=TRUE)
+```
