@@ -1,3 +1,5 @@
+#credits to Reiman D, Metwally AA, Sun J, Dai Y. PopPhy-CNN: A Phylogenetic Tree Embedded Architecture for Convolutional Neural Networks to Predict Host Phenotype From Metagenomic Data (2020)
+
 import os
 import sys
 import tensorflow as tf
