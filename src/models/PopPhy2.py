@@ -20,7 +20,7 @@ class ResNet:
         self.classes = classes
 
         #CONFIGURATIONS
-        self.epochs = 150
+        self.epochs = 100
         self.batch_size = 24
         self.optimizer = tf.keras.optimizers.Adam()
         #self.optimizer = tf.keras.optimizers.Adam(learning_rate=0.0005)
@@ -160,15 +160,15 @@ class ResNet:
         x = tf.keras.layers.Flatten()(x)
         
         #fc
-        x = tf.keras.layers.Dense(50, activation = 'sigmoid', name = 'fc', kernel_initializer = tf.keras.initializers.glorot_uniform(seed=0), kernel_regularizer=tf.keras.regularizers.l2(0.01))(x) 
+        x = tf.keras.layers.Dense(100, activation = 'relu', name = 'fc', kernel_initializer = tf.keras.initializers.glorot_uniform(seed=0), kernel_regularizer=tf.keras.regularizers.l2(0.01))(x) 
         
-        x = tf.keras.layers.Dropout(rate=0.5)(x)
+        #x = tf.keras.layers.Dropout(rate=0.5)(x)
 
         
-        #x = tf.keras.layers.Dense(100, activation = 'sigmoid', name = 'fc2', kernel_initializer = tf.keras.initializers.glorot_uniform(seed=0), kernel_regularizer=tf.keras.regularizers.l2(0.01))(x) 
+        #x = tf.keras.layers.Dense(50, activation = 'relu', name = 'fc2', kernel_initializer = tf.keras.initializers.glorot_uniform(seed=0), kernel_regularizer=tf.keras.regularizers.l2(0.01))(x) 
         
         #dropout
-        #x = tf.keras.layers.Dropout(rate=0.5)(x)
+        #x = tf.keras.layers.Dropout(rate=0.1)(x)
 
         #softmax
         x = tf.keras.layers.Dense(2, activation = 'softmax', name = 'softmax', kernel_initializer = tf.keras.initializers.glorot_uniform(seed=0))(x)
@@ -182,6 +182,8 @@ class ResNet:
         return
 
     def train(self, x_train, y_train, x_test, y_test, path_weights, use_weights):
+    #def train(self, x_train, y_train, x_test, y_test):
+
         """
         Compiles, then trains the model
     
@@ -203,8 +205,8 @@ class ResNet:
           elif epoch >= 125:
             return 0.0001
 
-        self.model.fit(x_train, y_train, epochs = self.epochs, batch_size = self.batch_size, validation_data=(x_test, y_test), callbacks=[self.callback, tf.keras.callbacks.LearningRateScheduler(schedule)])
-        #self.model.fit(x_train, y_train, epochs = self.epochs, batch_size = self.batch_size, validation_data=(x_test, y_test), callbacks=[self.callback])
+        #self.model.fit(x_train, y_train, epochs = self.epochs, batch_size = self.batch_size, validation_data=(x_test, y_test), callbacks=[self.callback, tf.keras.callbacks.LearningRateScheduler(schedule)])
+        self.model.fit(x_train, y_train, epochs = self.epochs, batch_size = self.batch_size, validation_data=(x_test, y_test), callbacks=[self.callback])
 
         #tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=10)
         return
