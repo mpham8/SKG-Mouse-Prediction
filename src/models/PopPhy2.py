@@ -20,8 +20,8 @@ class ResNet:
         self.classes = classes
 
         #CONFIGURATIONS
-        self.epochs = 100
-        self.batch_size = 24
+        self.epochs = 150
+        self.batch_size = 6
         self.optimizer = tf.keras.optimizers.Adam()
         #self.optimizer = tf.keras.optimizers.Adam(learning_rate=0.0005)
         self.loss = tf.keras.losses.BinaryCrossentropy(from_logits=True)
@@ -141,6 +141,7 @@ class ResNet:
         #x = tf.keras.layers.Conv2D(64, (3, 3), strides = (2,2), padding = 'same', name = 'convmid2', kernel_initializer = tf.keras.initializers.glorot_uniform(seed=0))(input)
         x = self.identity_block(x, 64, [2,4,2,4], '2b')
         #x = tf.keras.layers.Conv2D(64, (3, 10), strides = (1,1), padding = 'same', name = 'convmid3', kernel_initializer = tf.keras.initializers.glorot_uniform(seed=0))(input)
+        #x = self.identity_block(x, 64, [2,4,2,4], '2c')
 
         #x = self.identity_block(x, 32, [3,10,3,10], '2c')
         #x = self.identity_block(x, 64, '2d')
@@ -160,13 +161,15 @@ class ResNet:
         x = tf.keras.layers.Flatten()(x)
         
         #fc
-        x = tf.keras.layers.Dense(100, activation = 'relu', name = 'fc', kernel_initializer = tf.keras.initializers.glorot_uniform(seed=0), kernel_regularizer=tf.keras.regularizers.l2(0.01))(x) 
+        x = tf.keras.layers.Dense(100, activation = 'sigmoid', name = 'fc', kernel_initializer = tf.keras.initializers.glorot_uniform(seed=0), kernel_regularizer=tf.keras.regularizers.l2(0.01))(x) 
         
-        #x = tf.keras.layers.Dropout(rate=0.5)(x)
+        x = tf.keras.layers.Dropout(rate=0.3)(x)
 
         
-        #x = tf.keras.layers.Dense(50, activation = 'relu', name = 'fc2', kernel_initializer = tf.keras.initializers.glorot_uniform(seed=0), kernel_regularizer=tf.keras.regularizers.l2(0.01))(x) 
+        x = tf.keras.layers.Dense(32, activation = 'sigmoid', name = 'fc2', kernel_initializer = tf.keras.initializers.glorot_uniform(seed=0), kernel_regularizer=tf.keras.regularizers.l2(0.01))(x) 
         
+        #x = tf.keras.layers.Dense(25, activation = 'relu', name = 'fc3', kernel_initializer = tf.keras.initializers.glorot_uniform(seed=0), kernel_regularizer=tf.keras.regularizers.l2(0.01))(x) 
+
         #dropout
         #x = tf.keras.layers.Dropout(rate=0.1)(x)
 
@@ -198,11 +201,17 @@ class ResNet:
           self.model.load_weights("../data/" + path_weights + "/model_weights.h5")
 
         def schedule(epoch):
-          if epoch < 65:
+          # if epoch < 65:
+          #   return 0.001
+          # elif epoch >= 65 & epoch < 80:
+          #   return 0.0005
+          # elif epoch >= 125:
+          #   return 0.0001
+          if epoch < 100:
             return 0.001
-          elif epoch >= 65 & epoch < 80:
+          elif epoch >= 100 & epoch < 125:
             return 0.0005
-          elif epoch >= 125:
+          elif epoch >= 150:
             return 0.0001
 
         #self.model.fit(x_train, y_train, epochs = self.epochs, batch_size = self.batch_size, validation_data=(x_test, y_test), callbacks=[self.callback, tf.keras.callbacks.LearningRateScheduler(schedule)])
