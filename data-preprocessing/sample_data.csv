@@ -1,4 +1,9 @@
 "","SampleLabel","MouseID","Sex","Genotype","TimePoint","Tx","SampleInfo","Row","Column","type","SKG_Exp","replicate","ID","exp","plate","Day","Cage","FacilityOrigin","DaysPost","JA_Group","JA_Sex","JA_Abx","JA_Collection"
-"RRN-SKG2-p2-92","RRN-SKG2-p2-92","12",NA,NA,"14","PBS",NA,"D","12","feces","SKG2","0",NA,"skg2","plate2",NA,"4150962","MTZ","21",NA,NA,NA,NA
-"RRN-SKG2-p2-95","RRN-SKG2-p2-95","15",NA,NA,"14","PBS",NA,"G","12","feces","SKG2","0",NA,"skg2","plate2",NA,"4150966","MTZ","21",NA,NA,NA,NA
-"RRN-SKG2-p2-96","RRN-SKG2-p2-96","16",NA,NA,"14","PBS",NA,"H","12","feces","SKG2","0",NA,"skg2","plate2",NA,"4150966","MTZ","21",NA,NA,NA,NA
+"RRN-SKG2-p1-65","RRN-SKG2-p1-65","1",NA,NA,"5","MTX",NA,"A","9","feces","SKG2","0",NA,"skg2","plate1",NA,"4070852","PSB","7",NA,NA,NA,NA
+"RRN-SKG2-p1-66","RRN-SKG2-p1-66","2",NA,NA,"5","MTX",NA,"B","9","feces","SKG2","0",NA,"skg2","plate1",NA,"4070852","PSB","7",NA,NA,NA,NA
+"RRN-SKG2-p1-67","RRN-SKG2-p1-67","3",NA,NA,"5","MTX",NA,"C","9","feces","SKG2","0",NA,"skg2","plate1",NA,"4070852","MTZ","7",NA,NA,NA,NA
+"RRN-SKG2-p1-68","RRN-SKG2-p1-68","4",NA,NA,"5","MTX",NA,"D","9","feces","SKG2","0",NA,"skg2","plate1",NA,"4070852","MTZ","7",NA,NA,NA,NA
+"RRN-SKG2-p1-69","RRN-SKG2-p1-69","5",NA,NA,"5","MTX",NA,"E","9","feces","SKG2","0",NA,"skg2","plate1",NA,"4070853","PSB","7",NA,NA,NA,NA
+"RRN-SKG2-p1-70","RRN-SKG2-p1-70","6",NA,NA,"5","MTX",NA,"F","9","feces","SKG2","0",NA,"skg2","plate1",NA,"4070853","PSB","7",NA,NA,NA,NA
+"RRN-SKG2-p1-71","RRN-SKG2-p1-71","7",NA,NA,"5","MTX",NA,"G","9","feces","SKG2","0",NA,"skg2","plate1",NA,"4070853","PSB","7",NA,NA,NA,NA
+"RRN-SKG2-p1-72","RRN-SKG2-p1-72","8",NA,NA,"5","MTX",NA,"H","9","feces","SKG2","0",NA,"skg2","plate1",NA,"4070853","MTZ","7",NA,NA,NA,NA

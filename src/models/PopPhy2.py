@@ -20,8 +20,8 @@ class ResNet:
         self.classes = classes
 
         #CONFIGURATIONS
-        self.epochs = 150
-        self.batch_size = 6
+        self.epochs = 12  
+        self.batch_size = 2
         self.optimizer = tf.keras.optimizers.Adam()
         #self.optimizer = tf.keras.optimizers.Adam(learning_rate=0.0005)
         self.loss = tf.keras.losses.BinaryCrossentropy(from_logits=True)
@@ -134,7 +134,7 @@ class ResNet:
         #x = tf.keras.layers.Activation('relu')(x)
 
         #Residual Block 1
-        #x = tf.keras.layers.Conv2D(32, (3, 20), strides = (3, 3), name = 'convmid', kernel_initializer = tf.keras.initializers.glorot_uniform(seed=0))(input)
+        #x = tf.keras.layers.Conv2D(32, (4, 24), strides = (3, 3), name = 'convmid', kernel_initializer = tf.keras.initializers.glorot_uniform(seed=0))(input)
         #x = tf.keras.layers.BatchNormalization(name = 'bn2')(x)
         #x = tf.keras.layers.Activation('relu')(x)
         x = self.identity_block(input, 64, [2,4,2,4], '2a')
@@ -154,7 +154,7 @@ class ResNet:
         #x = self.convolutional_block(x, 128, '2b')
         
         
-        x = tf.keras.layers.Conv2D(1, (1, 1), strides = (1, 1), padding = 'same', name = 'conv2', kernel_initializer = tf.keras.initializers.glorot_uniform(seed=0))(x)
+        x = tf.keras.layers.Conv2D(1, (3, 3), strides = (1, 1), padding = 'same', name = 'conv2', kernel_initializer = tf.keras.initializers.glorot_uniform(seed=0))(x)
         
         
         #flatten
@@ -163,10 +163,10 @@ class ResNet:
         #fc
         x = tf.keras.layers.Dense(100, activation = 'sigmoid', name = 'fc', kernel_initializer = tf.keras.initializers.glorot_uniform(seed=0), kernel_regularizer=tf.keras.regularizers.l2(0.01))(x) 
         
-        x = tf.keras.layers.Dropout(rate=0.3)(x)
+        #x = tf.keras.layers.Dropout(rate=0.0)(x)
 
         
-        x = tf.keras.layers.Dense(32, activation = 'sigmoid', name = 'fc2', kernel_initializer = tf.keras.initializers.glorot_uniform(seed=0), kernel_regularizer=tf.keras.regularizers.l2(0.01))(x) 
+        #x = tf.keras.layers.Dense(32, activation = 'sigmoid', name = 'fc2', kernel_initializer = tf.keras.initializers.glorot_uniform(seed=0), kernel_regularizer=tf.keras.regularizers.l2(0.01))(x) 
         
         #x = tf.keras.layers.Dense(25, activation = 'relu', name = 'fc3', kernel_initializer = tf.keras.initializers.glorot_uniform(seed=0), kernel_regularizer=tf.keras.regularizers.l2(0.01))(x) 
 

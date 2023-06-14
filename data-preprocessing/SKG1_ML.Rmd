@@ -73,12 +73,20 @@ load(paste0(path,"SKG2021.Rdata"))
 ```{r}
 
 #sample table
-ps0 <- subset_samples(ps0, exp=="skg1" & SKG_Exp!="SKG2" & !is.na(MouseID))
-ps0 <- subset_samples(ps0, TimePoint!= 4)
-ps0 <- subset_samples(ps0, TimePoint!= 2)
-ps0 <- subset_samples(ps0, TimePoint!= 3)
+#ps0 <- subset_samples(ps0, exp=="skg2" & FacilityOrigin=="MTZ" & !is.na(MouseID))
 
-ps0 <- subset_samples(ps0, Genotype!= "SKGBoyJ")
+ps0 <- subset_samples(ps0, exp=="skg2" & !is.na(MouseID))
+ps0 <- subset_samples(ps0, TimePoint== 5)
+ps0 <- subset_samples(ps0, Tx == "MTX")
+
+#ps0 <- subset_samples(ps0, exp=="skg2" & FacilityOrigin=="PSB" & !is.na(MouseID))
+
+
+#ps0 <- subset_samples(ps0, exp=="skg1" & SKG_Exp!="SKG2" & !is.na(MouseID))
+#ps0 <- subset_samples(ps0, TimePoint!= 4)
+#ps0 <- subset_samples(ps0, TimePoint!= 2)
+#ps0 <- subset_samples(ps0, TimePoint!= 3)
+#ps0 <- subset_samples(ps0, Genotype!= "SKGBoyJ")
 
 
 
