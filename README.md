@@ -15,8 +15,8 @@ Run preprocessing.ipynb <br>
 -change "folder name" variable in "export dataframes to tsv and txt files" to get data export <br>
 -this script assigns a label for each mouse and exports "abundance.tsv" and corresponding "labels.txt" into specificied directory in data/YOURDATASET folder 
 
-## Modify ML Model Architechture
--Modify Architechture or Parameters of ML models in src/model/ (src/model/PopPhy2.py is default and highest accuracy)
+## Modify ML Model Architecture
+-Modify architecture or parameters of ML models in src/model/MODELNAME.py (src/model/PopPhy2.py is default and highest accuracy)
 
 ## Train ML models
 -configure model and dataset in "Configuration" section in src/train.ipynb and run <br>
