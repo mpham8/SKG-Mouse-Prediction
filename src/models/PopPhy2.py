@@ -1,8 +1,3 @@
-"""
-  Winter 2022
-  Michael Pham
-"""
-
 import os
 import numpy as np
 import tensorflow as tf
