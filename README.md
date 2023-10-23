@@ -6,20 +6,20 @@ Built on top of PopPhy-CNN (Reiman et al., PopPhy-CNN: A Phylogenetic Tree Embed
 
 ## Data Preprocessing
 
-Run data-preproccessing/SKG1_ML.Rmd
--change "SKG2021.Rdata" to specific Rdata file
+Run data-preproccessing/SKG1_ML.Rmd <br>
+-change "SKG2021.Rdata" to specific Rdata file <br>
 -this script takes a Rdata file and uses Phyloseq to exports a "otu.csv", "sample_data.csv", and "taxa.csv" into the local directory
 
-Run preprocessing.ipynb
--change "Get labels" section to get 0 and 1 labels for desired specificed phenotype
--change "folder name" variable in "export dataframes to tsv and txt files" to get data export
--this script assigns a label for each mouse and exports "abundance.tsv" and corresponding "labels.txt" into specificied directory in data/ folder
+Run preprocessing.ipynb <br>
+-change "Get labels" section to get 0 and 1 labels for desired specificed phenotype <br>
+-change "folder name" variable in "export dataframes to tsv and txt files" to get data export <br>
+-this script assigns a label for each mouse and exports "abundance.tsv" and corresponding "labels.txt" into specificied directory in data/YOURDATASET folder 
 
 ## Modify ML Model Architechture
 -Modify Architechture or Parameters of ML models in src/model/ (src/model/PopPhy2.py is default and highest accuracy)
 
 ## Train ML models
--configure model and dataset in "Configuration" section in src/train.ipynb and run
+-configure model and dataset in "Configuration" section in src/train.ipynb and run <br>
 -note: data/YOURDATASET/PopPhy-tree-core.pkl needs to be deleted before you change the threshold in src/train.ipynb
 
 
