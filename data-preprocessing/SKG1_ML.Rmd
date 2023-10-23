@@ -1,16 +1,8 @@
 ---
-title: "SKG1_forLearnerAnalysis"
-author: "Learner Name Here"
-date: "11/16/22"
 output: html_document
   toc=true
   toc_float: true
 ---
-
-Experimental Details:
-There are two datasets in the .RData file that you will be receiving: SKG1 and SKG2. You will only focus on SKG1 dataset.
-
-SKG1 dataset contains samples that were collected by our collaborator, Dr. Judith Ashouri. There are a number of variables that we can look at in this study. Judy had different strains of mice: SKG, BoyJ, and wild-type. SKG mice get arthritis but the other two do not. She noticed that over time, the mice were getting sick in unexpected ways (they were getting something called "rectal prolapse" and needed to be euthanized early because of this). Treating the mice with broad spectrum antibiotics helped to alleviate this phenotype. She collected stool samples from the same mice both before and after antibiotics. She had males and females in her experiments, and this is of interest because females tend to get arthritis earlier and more consistently than males. We will spend some time understanding a table that Judy sent ("JA_comparisons" sheet in the Excel file that I send you). We will be comparing mice from different "Group", "gender",and "Collection" for mice that were given antibiotics. There are a lot of possible questions to ask of the data. 
 
 
 ```{r setup, include=FALSE}
@@ -25,7 +17,6 @@ if (!require("BiocManager", quietly = TRUE))
 BiocManager::install("phyloseq")
 
 library(phyloseq); packageVersion("phyloseq")
-#library(ggplot2); packageVersion("ggplot2")
 
 #the first time you run this, you will need to install all these packages.
 #this can be done by running the next two commands; after you run them, you will need to comment them out
@@ -33,7 +24,6 @@ library(phyloseq); packageVersion("phyloseq")
 setRepositories() #enter 1 2 3 4 5
 install.packages(c("biomformat","ape","readxl","ggthemes","tidyverse","reshape","gplots","RColorBrewer","pheatmap","gridExtra","qiime2R","nlme","patchwork"))
 
-#you will load these libraries each time you start a new R session
 library(biomformat)
 library(ape)
 library(readxl)
@@ -46,7 +36,7 @@ library(pheatmap)
 library(gridExtra)
 #library(qiime2R)
 library(nlme)
-library(patchwork) #for multiplot figures
+library(patchwork) 
 library(ggpubr)
 
 library(tibble)
@@ -63,8 +53,7 @@ theme_set(theme_classic(base_size = 9) +theme(axis.text = element_text(colour = 
 
 Load Data
 ```{r}
-#find the path to where you stored SKG2021.Rdata, uncomment the line below and execute. Errors here will be because R cannot find where SKG2021.Rdata is located on your filesystem
-#path=""
+#Change file path
 load(paste0(path,"SKG2021.Rdata"))
 ```
 
@@ -73,15 +62,12 @@ load(paste0(path,"SKG2021.Rdata"))
 ```{r}
 
 #sample table
-#ps0 <- subset_samples(ps0, exp=="skg2" & FacilityOrigin=="MTZ" & !is.na(MouseID))
-
 ps0 <- subset_samples(ps0, exp=="skg2" & !is.na(MouseID))
 ps0 <- subset_samples(ps0, TimePoint== 5)
 ps0 <- subset_samples(ps0, Tx == "MTX")
 
+#ALTERNATIVE EXAMPLE SUBSETS:
 #ps0 <- subset_samples(ps0, exp=="skg2" & FacilityOrigin=="PSB" & !is.na(MouseID))
-
-
 #ps0 <- subset_samples(ps0, exp=="skg1" & SKG_Exp!="SKG2" & !is.na(MouseID))
 #ps0 <- subset_samples(ps0, TimePoint!= 4)
 #ps0 <- subset_samples(ps0, TimePoint!= 2)
@@ -92,6 +78,7 @@ ps0 <- subset_samples(ps0, Tx == "MTX")
 
 
 sampleDF=as.tibble(sample_data(ps0))
+
 #otu table
 ot=as.data.frame(ps0@otu_table)
 #tax table
@@ -144,6 +131,7 @@ ps_rarefied <- rarefy_even_depth(ps0, sample.size=1000) #LEARNER: you can change
 ps_prop <- transform_sample_counts(ps0, function (x) x/sum(x) * 100)
 
 ```
+
 Convert Phyloseq objects to dataframes to export to csv
 ```{r}
 sample_data_matrix <-as.matrix(sample_data(ps0))

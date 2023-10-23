@@ -6,7 +6,6 @@
 import os
 import numpy as np
 import tensorflow as tf
-from tensorflow.keras.datasets import mnist
 from sklearn.model_selection import KFold
 from sklearn.metrics import roc_auc_score, average_precision_score, f1_score, matthews_corrcoef
 import datetime
@@ -54,12 +53,12 @@ class ResNet:
         applies ReLu activation to x
 
         Attributes:
-          x (?): 
+          x (tensor): Tensorflow tensor
           filters (int): number of filters
           names (str): name of layer
 
         Returns:
-          x(?):
+          x(tensor): Tensorflow tensor
         """
         
         x_skip = x
@@ -92,12 +91,12 @@ class ResNet:
         applies ReLu activation to x
 
         Attributes:
-          x (?): 
+          x (tensor): Tensorflow Tensor
           filters (int): number of filters
           names (str): name of layer
 
         Returns:
-          x(?):
+          x(tensor): Tensorflow Tensor
         """
         
         #skip
@@ -275,86 +274,3 @@ class ResNet:
     def destroy(self):
       tf.keras.backend.clear_session()
       return
-
-def data():
-    k = 5
-    
-    #load data set
-    (input, target), (i2, t2) = mnist.load_data()
-    target = tf.keras.utils.to_categorical(target, 10, dtype='uint8')
-    t2 = tf.keras.utils.to_categorical(t2, 10, dtype='uint8')
-
-    
-
-    # #shuffle
-    # seed = np.random.randint(100)
-    # np.random.seed(seed)
-    # np.random.shuffle(input)
-    # np.random.seed(seed)
-    # np.random.shuffle(target)
-
-    # groups_input = []
-    # groups_target = []
-    # k_size = len(input)//k
-    # for i in range(k):
-    #   start, end = 0, k_size
-    #   if i == k:
-    #     group_input = input[start:]
-    #     group_target = target[start:]
-    #   else:
-    #     group_input = input[start:end]
-    #     group_target = target[start:end]
-    #   start += k_size
-    #   end += k_size
-    #   groups_input.append(group_input)
-    #   groups_target.append(group_target)
-
-    # x_train = []
-    # y_train = []
-    # x_test = []
-    # y_test = []
-    # for i in range(k-1, -1, -1):
-    #   x_train.append(np.concatenate((groups_input[i-1], groups_input[i-2], groups_input[i-3], groups_input[i-4])))
-    #   y_train.append(np.concatenate((groups_target[i-1], groups_target[i-2], groups_target[i-3], groups_target[i-4])))
-
-    #   x_test.append(groups_input[i])
-    #   y_test.append(groups_target[i])
-    
-    #iterate later
-    x_train = input
-    y_train = target
-    x_test = i2
-    y_test = t2
-
-
-    #one hot encoding
-    
-    
-    model = ResNet(height = 28, width = 28, channels = 1, classes = 10)
-    model.init_model()
-    model.train(x_train, y_train)
-    y_pred = model.predict(x_test)
-    model.evaluate(y_test, y_pred)
-    print(model.model.summary())
-
-    # model = ResNet(height = 28, width = 28, channels = 1, classes = 10)
-    # m = model.init_model()
-    # m.compile('adam', 'categorical_crossentropy', metrics = ['accuracy'])
-    # print(m.summary())
-    # m.fit(x_train, y_train, epochs = 5, batch_size = 64)
-
-    # y_pred = m.predict(x_test)
-    # auc_roc = roc_auc_score(y_test, y_pred)
-    # print(auc_roc)
-
-
-    # y_pred = model.predict(x_test)
-    # model.evaluate(y_test, y_pred)
-    # print(model.model.summary())
-    
-
-
-    return
-
-#data()
-
