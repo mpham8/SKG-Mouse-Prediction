@@ -16,7 +16,7 @@ Built on top of PopPhy-CNN (Reiman et al., PopPhy-CNN: A Phylogenetic Tree Embed
 -this script assigns a label for each mouse and exports "abundance.tsv" and corresponding "labels.txt" into specificied directory in data/YOURDATASET folder 
 
 ## Modify ML Model Architecture
-<strong> Modify architecture or parameters of ML models in src/model/MODELNAME.py (src/model/PopPhy2.py is default and highest accuracy) </strong>
+<strong> Modify architecture or parameters of ML models in src/model/MODELNAME.py (src/model/PopPhy2.py is default) </strong>
 
 ## Train ML models
 <strong> Configure model and dataset in "Configuration" section in src/train.ipynb and run </strong> <br>
